@@ -1,3 +1,9 @@
+### Turn this into a function that will take multiple inputs, the social media description along with the
+### art style, the no of posts, the type of posts(optional) and return the caption and the image prompt.
+### Put the keys in a .env file
+
+
+
 import os
 import requests
 
