@@ -1,3 +1,9 @@
+### Turn this into a function that takes the caption from the caption_generation.py file and returns
+### image url and caption pairs which can be used for pipelining. No need to display the image.
+### Also put all endpoints and keys into .env files
+
+
+
 from openai import AzureOpenAI
 import os
 import requests
