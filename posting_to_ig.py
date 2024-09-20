@@ -1,3 +1,9 @@
+### This is okay as is, just change job function to take url caption pairs in its arguments,
+### which will be provided from the image_generation.py file.
+### Also put keys into a .env file
+
+
+
 import requests
 import json
 import time
