@@ -1,46 +1,63 @@
-### Turn this into a function that takes the caption from the caption_generation.py file and returns
-### image url and caption pairs which can be used for pipelining. No need to display the image.
-### Also put all endpoints and keys into .env files
+### Function is created successfully. Only need to test in pipeline.
 
 
 
-from openai import AzureOpenAI
 import os
 import requests
-from PIL import Image
 import json
+from openai import AzureOpenAI
+from dotenv import load_dotenv
 
-client = AzureOpenAI(
+# Load environment variables from the .env file
+load_dotenv()
+
+# Get environment variables
+IMAGE_API_KEY = os.getenv("IMAGE_API_KEY")
+IMAGE_ENDPOINT = os.getenv("IMAGE_ENDPOINT")
+
+image_client = AzureOpenAI(
     api_version="2024-05-01-preview",
-    azure_endpoint="https://iig-openai.openai.azure.com/",
-    api_key="5e0c5e35b933413d83f4a981576da9cf",
+    azure_endpoint=IMAGE_ENDPOINT,
+    api_key=IMAGE_API_KEY,
 )
 
-result = client.images.generate(
-    model="iig-image", # the name of our DALL-E 3 deployment
-    prompt="Design a vibrant and uplifting abstract image that illustrates the positive impact of nature on childhood. The scene should feature elements like playful children interacting with nature, lush green landscapes, and colorful, whimsical elements that evoke a sense of joy and imagination. Use bright, cheerful colors and fluid, organic shapes to convey a sense of wonder and positivity. The style should be abstract yet joyful, highlighting the harmony between children and the natural world.",
-    n=1
-)
+# Function to generate image URL and return caption-image pairs
+def generate_image(caption,prompt):
+    """ Generate an image caption pair from a given prompt using DALL-E 3.
 
-json_response = json.loads(result.model_dump_json())
-print(json_response['data'][0]['url']) # can directly send to the instagram graph api
+        Args:
+            caption (str): Caption text for the Instagram post.
+            prompt (str): Detailed image generation prompt for DALL-E 3.
 
-# Set the directory for the stored image
-image_dir = os.path.join(os.curdir, 'images')
+        Returns:
+            dict: A dictionary containing the caption and the generated image URL.
+    """
+    # Generate image from caption using DALL-E 3
+    try:
+        result = image_client.images.generate(
+            model="iig-image",  # the name of our DALL-E 3 deployment
+            prompt=prompt,
+            n=1
+        )
+    except Exception as e:
+        raise SystemExit(f"Failed to generate image. Error: {e}")
 
-# If the directory doesn't exist, create it
-if not os.path.isdir(image_dir):
-    os.mkdir(image_dir)
+    # Parse the result and get the image URL
+    try:
+        json_response = json.loads(result.model_dump_json())
+        image_url = json_response['data'][0]['url']  # Get image URL
+    except KeyError:
+        raise ValueError("Image generation failed or no URL was returned.")
 
-# Initialize the image path (note the filetype should be png)
-image_path = os.path.join(image_dir, 'generated_image.png')
+    # Return the caption and corresponding image URL as a pair
+    return {"caption": caption, "image_url": image_url}
 
-# Retrieve the generated image
-image_url = json_response["data"][0]["url"]  # extract image URL from response
-generated_image = requests.get(image_url).content  # download the image
-with open(image_path, "wb") as image_file:
-    image_file.write(generated_image)
 
-# Display the image in the default image viewer
-image = Image.open(image_path)
-image.show()
+# Example usage:
+if __name__ == "__main__":
+    # Sample caption prompt pairs to test
+    caption = "🏛️ The timeless beauty of the Taj Mahal, reimagined with a neon glow. Flashy yet elegant, a pop art ode to one of the world's greatest wonders. 💫 #NeonTajMahal #PopArtJourney #ModernWonders"
+    prompt = "Design a vibrant pop art version of the Taj Mahal, with neon colors outlining its iconic white marble domes and arches. The background should feature a glowing neon sky in shades of purple and pink, while the Taj Mahal itself is highlighted with bright neon blue, pink, and green accents to give it a modern, flashy aesthetic."
+
+    result = generate_image(caption, prompt)
+    print(result)  # Print or send result to another system
