@@ -1,64 +1,95 @@
-### Turn this into a function that will take multiple inputs, the social media description along with the
-### art style, the no of posts, the type of posts(optional) and return the caption and the image prompt.
-### Put the keys in a .env file
-
-
-
 import os
-import requests
+import json
+from openai import AzureOpenAI
+from dotenv import load_dotenv
 
-# Configuration
-API_KEY = "5e0c5e35b933413d83f4a981576da9cf"
-headers = {
-    "Content-Type": "application/json",
-    "api-key": API_KEY,
-}
+# Load environment variables from the .env file
+load_dotenv()
 
-# Payload for the request
-payload = {
-  "messages": [
-    {
-      "role": "system",
-      "content": [
-        {
-          "type": "text",
-          "text": "Imagine you are a social media manager for a company, I will provide you with a description of your clients Instagram page, number of posts and ideas for those posts. You will provide me with a caption for each Instagram post idea and a detailed prompt for image generation to feed to dalle 3.\n\nThe response is to be formatted in a python dictionary with each post having its own key. The value for each key should be a list with the first element as the caption and the second element as the prompt"
+# Get environment variables
+CHAT_API_KEY = os.getenv("CHAT_API_KEY")
+CHAT_ENDPOINT = os.getenv("CHAT_ENDPOINT")
+
+# Initialize Azure OpenAI client for caption generation
+chat_client = AzureOpenAI(
+    azure_endpoint=CHAT_ENDPOINT,
+    api_key=CHAT_API_KEY,
+    api_version="2024-05-01-preview",
+)
+
+# Function to generate captions and prompts for Instagram posts
+def generate_captions_and_prompts(page_description, num_posts, post_ideas):
+    """ Generate captions and prompts for Instagram posts based on the page description and post ideas.
+
+        Args:
+            page_description (str): Description of the Instagram page.
+            num_posts (int): Number of posts to generate captions and prompts for.
+            post_ideas (list): List of post ideas.
+
+        Returns:
+            dict: A dictionary containing post codes with corresponding captions and prompts.
+    """
+
+    # Prepare the prompt with user inputs
+    user_content = f"Page Description: {page_description}\nNo. of posts: {num_posts}\nPost Ideas:\n" + "\n".join(post_ideas)
+
+    # Generate the completion
+    completion = chat_client.chat.completions.create(
+        model=os.getenv("DEPLOYMENT_NAME", "gpt-4"),
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "Imagine you are a social media manager for a company. I will provide you with a description of "
+                    "your client's Instagram page, number of posts, and ideas for those posts. You will provide me with "
+                    "a caption for each Instagram post idea and a detailed prompt for image generation to feed to DALL-E 3."
+                    "\n\nThe response should be a nested JSON. The first layer will be the post code (e.g., post_1, post_2), "
+                    "and the second layer will contain 'caption' and 'prompt' fields.\n"
+                )
+            },
+            {
+                "role": "user",
+                "content": user_content
+            }
+        ],
+        max_tokens=800,
+        temperature=0.7,
+        top_p=0.95,
+        frequency_penalty=0,
+        presence_penalty=0,
+    )
+
+    # Parse the JSON response
+    response = completion.to_json()
+    response_dict = json.loads(response)
+
+    # Extract the 'message' content which contains the captions and prompts
+    message_content = response_dict['choices'][0]['message']['content']
+
+    # Convert the message content back to a dictionary
+    posts_data = json.loads(message_content)
+
+    # Initialize an empty dictionary to store the captions and prompts
+    nested_dict = {}
+
+    # Loop through the posts and save captions and prompts to the dictionary
+    for post_key, post_data in posts_data.items():
+        nested_dict[post_key] = {
+            'caption': post_data['caption'],
+            'prompt': post_data['prompt']
         }
-      ]
-    },
-    {
-      "role": "user",
-      "content": [
-        {
-          "type": "text",
-          "text": "Page Description: I am a graphic designing page with nature focused posts. I have abstract style posts."
-        },
 
-      ]
-    },
-    {
-      "role": "assistant",
-      "content": [
-        {
-          "type": "text",
-          "text": "```python\ninstagram_posts = {\n    \"post_1\": [\n        \"🌍 A glimpse into a bleak future. Our choices today shape the world of tomorrow. Let's protect nature before it's too late. #SaveThePlanet #Nature #AbstractArt\",\n        \"An abstract representation of a desolate landscape, showcasing cracked earth, dying trees, and a polluted sky. Use muted colors like grays and browns to evoke a sense of despair.\"\n    ],\n    \"post_2\": [\n        \"🌿 Nature's embrace heals the soul. Here's a reminder of how the great outdoors can uplift our spirits and connect us to what truly matters. #NatureLovers #Wellbeing #ArtInNature\",\n        \"A vibrant abstract artwork illustrating the positive impact of nature on people. Include figures joyfully interacting with trees, flowers, and water, surrounded by bright greens and blues to evoke feelings of tranquility and happiness.\"\n    ]\n}\n```"
-        }
-      ]
-    }
-  ],
-  "temperature": 0.7,
-  "top_p": 0.95,
-  "max_tokens": 800
-}
+    # Return the nested dictionary
+    return nested_dict
 
-ENDPOINT = "https://iig-openai.openai.azure.com/openai/deployments/iig-caption/chat/completions?api-version=2024-02-15-preview"
+# Example usage:
+if __name__ == "__main__":
+    page_description = "I am a graphic design page with nature-focused posts and abstract styles."
+    num_posts = 2
+    post_ideas = [
+        "Post 1: Something to portray the bleak future if we continue to destroy nature.",
+        "Post 2: Something to show the impact nature has on people."
+    ]
 
-# Send request
-try:
-    response = requests.post(ENDPOINT, headers=headers, json=payload)
-    response.raise_for_status()  # Will raise an HTTPError if the HTTP request returned an unsuccessful status code
-except requests.RequestException as e:
-    raise SystemExit(f"Failed to make the request. Error: {e}")
-
-# Handle the response as needed (e.g., print or process)
-print(response.json())
+    result = generate_captions_and_prompts(page_description, num_posts, post_ideas)
+    print(result)  # Print the generated captions and prompts
