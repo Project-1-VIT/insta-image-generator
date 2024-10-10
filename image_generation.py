@@ -1,7 +1,3 @@
-### Function is created successfully. Only need to test in pipeline.
-
-
-
 import os
 import requests
 import json
