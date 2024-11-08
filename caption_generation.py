@@ -29,9 +29,13 @@ def generate_captions_and_prompts(page_description, num_posts, post_ideas=None):
         Returns:
             dict: A dictionary containing post codes with corresponding captions and prompts.
     """
-    if post_ideas is None:
-        user_content = f"Page Description: {page_description}\nNo. of posts: {num_posts}"
+    #Error handling for post_ideas
+    if post_ideas == "":
+        post_ideas = None
+
     # Prepare the prompt with user inputs
+    if post_ideas is None:
+        user_content = f"Page Description: {page_description}\nNo. of posts: {num_posts}" # Error handling so that model doesn't generate extra text
     else:
         user_content = f"Page Description: {page_description}\nNo. of posts: {num_posts}\nPost Ideas:\n" + "\n".join(post_ideas)
     print(user_content)

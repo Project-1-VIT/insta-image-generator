@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Post Scheduler</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Instagram Post Scheduler</h1>
+        <form id="scheduleForm">
+            <label for="accountDescription">Account Description:</label>
+            <textarea id="accountDescription" name="accountDescription" required placeholder="Describe your account..."></textarea>
+
+            <label for="numPosts">Number of Posts:</label>
+            <input type="number" id="numPosts" name="numPosts" min="1" required placeholder="Enter number of posts">
+
+            <label for="timeInterval">Time Interval (seconds):</label>
+            <input type="number" id="timeInterval" name="timeInterval" min="0" required placeholder="Interval between posts">
+
+            <label for="postIdeas">Post Ideas (Optional):</label>
+            <textarea id="postIdeas" name="postIdeas" placeholder="Enter your post ideas..."></textarea>
+
+            <button type="submit">Schedule Posts</button>
+        </form>
+        <div id="responseMessage"></div>
+    </div>
+</body>
+</html>
