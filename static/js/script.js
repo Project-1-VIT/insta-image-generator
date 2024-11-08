@@ -1,23 +1,33 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     console.log("script.js loaded successfully!");
 
     const scheduleForm = document.getElementById("scheduleForm");
     const submitButton = scheduleForm.querySelector("button[type='submit']");
+    const responseMessage = document.getElementById("responseMessage");
     let loading = false;
 
     if (scheduleForm) {
-        scheduleForm.addEventListener("submit", function(event) {
+        scheduleForm.addEventListener("submit", function (event) {
             event.preventDefault();
 
-            if (loading) return;  // Prevent further submissions if already loading
-            loading = true;
-            submitButton.disabled = true;
+            // Show loading message if a request is already being processed
+            if (loading) {
+                responseMessage.innerText = "A request is already being processed. Your submission has been queued.";
+                return;
+            }
 
+            // Mark as loading to handle feedback only (without disabling the button)
+            loading = true;
+            responseMessage.innerText = "Processing your request...";  // User feedback
+            submitButton.classList.add("loading");
+
+            // Collect form data
             const accountDescription = document.getElementById("accountDescription").value;
             const numPosts = document.getElementById("numPosts").value;
             const timeInterval = document.getElementById("timeInterval").value;
             const postIdeas = document.getElementById("postIdeas").value || null;
 
+            // Send POST request to the backend
             fetch("/schedule_post", {
                 method: "POST",
                 headers: {
@@ -30,22 +40,23 @@ document.addEventListener("DOMContentLoaded", function() {
                     post_ideas: postIdeas
                 })
             })
-            .then(response => {
-                loading = false;
-                submitButton.disabled = false; // Re-enable on response
-                if (!response.ok) {
-                    throw new Error("Request is already being processed.");
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Response from server:", data);
-                document.getElementById("responseMessage").innerText = data.message;
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                document.getElementById("responseMessage").innerText = error.message;
-            });
+                .then(response => {
+                    loading = false;  // Reset loading state when response is received
+                    submitButton.classList.remove("loading");
+
+                    if (!response.ok) {
+                        throw new Error("A request is already being processed.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Response from server:", data);
+                    responseMessage.innerText = data.message;  // Show success message
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    responseMessage.innerText = error.message;  // Show error message
+                });
         });
     }
 });
