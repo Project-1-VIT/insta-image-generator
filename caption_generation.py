@@ -18,7 +18,7 @@ chat_client = AzureOpenAI(
 )
 
 # Function to generate captions and prompts for Instagram posts
-def generate_captions_and_prompts(page_description, num_posts, post_ideas):
+def generate_captions_and_prompts(page_description, num_posts, post_ideas=None):
     """ Generate captions and prompts for Instagram posts based on the page description and post ideas.
 
         Args:
@@ -29,9 +29,12 @@ def generate_captions_and_prompts(page_description, num_posts, post_ideas):
         Returns:
             dict: A dictionary containing post codes with corresponding captions and prompts.
     """
-
+    if post_ideas is None:
+        user_content = f"Page Description: {page_description}\nNo. of posts: {num_posts}"
     # Prepare the prompt with user inputs
-    user_content = f"Page Description: {page_description}\nNo. of posts: {num_posts}\nPost Ideas:\n" + "\n".join(post_ideas)
+    else:
+        user_content = f"Page Description: {page_description}\nNo. of posts: {num_posts}\nPost Ideas:\n" + "\n".join(post_ideas)
+    print(user_content)
 
     # Generate the completion
     completion = chat_client.chat.completions.create(
@@ -65,6 +68,7 @@ def generate_captions_and_prompts(page_description, num_posts, post_ideas):
 
     # Extract the 'message' content which contains the captions and prompts
     message_content = response_dict['choices'][0]['message']['content']
+    print("Message content:", message_content)
 
     # Convert the message content back to a dictionary
     posts_data = json.loads(message_content)

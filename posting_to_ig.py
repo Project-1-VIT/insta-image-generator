@@ -164,11 +164,11 @@ def post(media_type, media_url, caption):
 if __name__ == "__main__":
     image_caption_pairs = [
         {
-            "image_url": "https://dalleproduse.blob.core.windows.net/private/images/7f21e12d-fc47-4420-a9da-7a108e45a5db/generated_00.png?se=2024-09-23T10%3A42%3A32Z&sig=NdbwwuXmOnx5m%2FP4HTF4KfpoMhs7XqQJ4KeImvjzkKM%3D&ske=2024-09-25T16%3A16%3A51Z&skoid=09ba021e-c417-441c-b203-c81e5dcd7b7f&sks=b&skt=2024-09-18T16%3A16%3A51Z&sktid=33e01921-4d64-4f8c-a055-5bdaffd5e33d&skv=2020-10-02&sp=r&spr=https&sr=b&sv=2020-10-02",
+            "image_url": "https://dalleproduse.blob.core.windows.net/private/images/fa8e93d0-23a2-4a34-b3ae-653f786f2296/generated_00.png?se=2024-11-09T14%3A30%3A02Z&sig=QA3Pm7ANa0%2BlI5wNMWwTP8v8sGELXr8oL442EoGtPVU%3D&ske=2024-11-15T07%3A26%3A35Z&skoid=09ba021e-c417-441c-b203-c81e5dcd7b7f&sks=b&skt=2024-11-08T07%3A26%3A35Z&sktid=33e01921-4d64-4f8c-a055-5bdaffd5e33d&skv=2020-10-02&sp=r&spr=https&sr=b&sv=2020-10-02",
             "caption": "Test caption:\n🗼 The Leaning Tower of Pisa, but with a neon glow! Bringing this historic monument into the pop art world with a bright and bold twist. 💡 #PisaGlow #NeonPopArt #TravelThroughArt"
         },
         {
-            "image_url": "https://dalleproduse.blob.core.windows.net/private/images/c3861234-cbe2-4746-891a-1c492e9f8ca3/generated_00.png?se=2024-09-23T10%3A47%3A41Z&sig=JnZITOAWg0%2FHY5QI70lG1quA2wWeQsJNz8ZFiqN%2Bh8k%3D&ske=2024-09-28T14%3A24%3A24Z&skoid=09ba021e-c417-441c-b203-c81e5dcd7b7f&sks=b&skt=2024-09-21T14%3A24%3A24Z&sktid=33e01921-4d64-4f8c-a055-5bdaffd5e33d&skv=2020-10-02&sp=r&spr=https&sr=b&sv=2020-10-02",
+            "image_url": "https://dalleproduse.blob.core.windows.net/private/images/fa8e93d0-23a2-4a34-b3ae-653f786f2296/generated_00.png?se=2024-11-09T14%3A30%3A02Z&sig=QA3Pm7ANa0%2BlI5wNMWwTP8v8sGELXr8oL442EoGtPVU%3D&ske=2024-11-15T07%3A26%3A35Z&skoid=09ba021e-c417-441c-b203-c81e5dcd7b7f&sks=b&skt=2024-11-08T07%3A26%3A35Z&sktid=33e01921-4d64-4f8c-a055-5bdaffd5e33d&skv=2020-10-02&sp=r&spr=https&sr=b&sv=2020-10-02",
             "caption": "Test caption:\n🏛️ The timeless beauty of the Taj Mahal, reimagined with a neon glow. Flashy yet elegant, a pop art ode to one of the world's greatest wonders. 💫 #NeonTajMahal #PopArtJourney #ModernWonders"
         }
     ]
@@ -177,4 +177,3 @@ if __name__ == "__main__":
         media_url = pair['image_url']
         caption = pair['caption']
         post("IMAGE", media_url, caption)
-

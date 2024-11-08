@@ -25,7 +25,7 @@ chat_client = AzureOpenAI(
     api_version="2024-05-01-preview",
 )
 
-# Initialize Azure OpenAI client for image   generation
+# Initialize Azure OpenAI client for image generation
 image_client = AzureOpenAI(
     api_version="2024-05-01-preview",
     azure_endpoint=IMAGE_ENDPOINT,
@@ -44,8 +44,8 @@ def schedule_post():
     data = request.json
     description = data.get('account_description')
     num_posts = int(data.get('num_posts'))
-    time_interval = int(data.get('time_interval', 0))  # Default to 0 if not provided
-    post_ideas = data.get('post_ideas', [])
+    time_interval = int(data.get('time_interval', 0))
+    post_ideas = data.get('post_ideas', None)
     print("Received data")
 
     # Step 1: Generate captions and prompts
