@@ -80,4 +80,4 @@ def schedule_post():
         processing_lock.release()  # Release the lock at the end of request processing
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
