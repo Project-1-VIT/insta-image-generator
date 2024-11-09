@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const accountDescription = document.getElementById("accountDescription").value;
             const numPosts = document.getElementById("numPosts").value;
             const timeInterval = document.getElementById("timeInterval").value;
-            const postIdeas = document.getElementById("postIdeas").value.split("\n").filter(idea => idea.trim() !== "");
+            const postIdeas = document.getElementById("postIdeas").value.split("\n").filter(idea => idea.trim() !== "") ;
 
             // Send POST request to the backend
             fetch("/schedule_post", {

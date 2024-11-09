@@ -30,7 +30,7 @@ def generate_captions_and_prompts(page_description, num_posts, post_ideas=None):
             dict: A dictionary containing post codes with corresponding captions and prompts.
     """
     #Error handling for post_ideas
-    if post_ideas == "":
+    if post_ideas == "" or post_ideas == []:
         post_ideas = None
 
     # Prepare the prompt with user inputs
