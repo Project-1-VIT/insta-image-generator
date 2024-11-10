@@ -1,37 +1,44 @@
+@import url('https://fonts.googleapis.com/css?family=Fjalla+One&display=swap');
+
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, #4facfe, #00f2fe);
-    display: flex;
-    justify-content: center;
+    background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/38816/image-from-rawpixel-id-2210775-jpeg.jpg') center center no-repeat;;
+    background-size: cover;
+    min-height: 100vh;
+    display: grid;
     align-items: center;
-    height: 100vh;
+    justify-items: center;
     margin: 0;
-    color: #333;
+    font-family: 'Fjalla One', sans-serif;
+    color: #2A293E;
 }
 
 .container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    max-width: 450px;
-    width: 100%;
+    background-color: #f8f4e5;
+    padding: 50px 100px;
+    border: 2px solid rgba(0, 0, 0, 1);
+    box-shadow: 15px 15px 1px #ffa580, 15px 15px 1px 2px rgba(0, 0, 0, 1);
     text-align: center;
-    transition: box-shadow 0.3s ease;
-}
-
-.container:hover {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    max-width: 500px;  /* Increased from 450px */
+    width: 100%;
+    border-radius: 10px;
+    position: relative;
 }
 
 h1 {
     font-size: 28px;
     color: #333;
     margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
 }
 
 label {
@@ -42,46 +49,63 @@ label {
 }
 
 textarea, input {
+    display: block;
     width: 100%;
-    padding: 12px;
+    padding: 12px 16px;
     margin-top: 8px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
+    font-size: 14pt;
+    border: none;
+    border-bottom: 5px solid rgba(0, 0, 0, 1);
+    background: #f8f4e5;
+    color: #2A293E;
+    outline: none;
+    box-sizing: border-box;
+    white-space: nowrap;
+}
+
+input {
+    height: 45px;  /* Increased from 45px */
+}
+
+textarea {
+    resize: none;
+    height: 45px;
+    line-height: 20px;
 }
 
 textarea:focus, input:focus {
-    border-color: #4facfe;
-    outline: none;
+    border-bottom: 5px solid #ffa580;
 }
 
 button {
+    display: block;
     width: 100%;
     padding: 12px;
     border-radius: 5px;
-    border: none;
-    background-color: #4facfe;
-    color: white;
+    background: #ffa580;
+    color: #2A293E;
     font-size: 18px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: 1px solid rgba(0, 0, 0, 1);
+    box-shadow: 3px 3px 1px 1px #95a4ff, 3px 3px 1px 2px rgba(0, 0, 0, 1);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 button:hover {
-    background-color: #3a8bcf;
-    transform: translateY(-2px);
-}
-
-button:active {
-    background-color: #3282bb;
-    transform: translateY(0);
+    background: rgba(0, 0, 0, 1);
+    color: white;
 }
 
 #responseMessage {
     margin-top: 20px;
     font-weight: bold;
     font-size: 16px;
-    color: #4facfe;
+    color: #ffa580;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 30px 20px;
+        margin: 20px;
+    }
 }
