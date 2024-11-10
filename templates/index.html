@@ -11,19 +11,27 @@
     <div class="container">
         <h1>Instagram Post Scheduler</h1>
         <form id="scheduleForm">
-            <label for="accountDescription">Account Description:</label>
-            <textarea id="accountDescription" name="accountDescription" required placeholder="Describe your account..."></textarea>
+            <div class="form-group">
+                <label for="accountDescription">Account Description:</label>
+                <textarea id="accountDescription" name="accountDescription" required placeholder="Describe your account..."></textarea>
+            </div>
 
-            <label for="numPosts">Number of Posts:</label>
-            <input type="number" id="numPosts" name="numPosts" min="1" required placeholder="Enter number of posts">
+            <div class="form-group">
+                <label for="numPosts">Number of Posts:</label>
+                <input type="number" id="numPosts" name="numPosts" min="1" required placeholder="Enter number of posts">
+            </div>
 
-            <label for="timeInterval">Time Interval (seconds):</label>
-            <input type="number" id="timeInterval" name="timeInterval" min="0" required placeholder="Interval between posts">
+            <div class="form-group">
+                <label for="timeInterval">Time Interval (seconds):</label>
+                <input type="number" id="timeInterval" name="timeInterval" min="0" required placeholder="Interval between posts">
+            </div>
 
-            <label for="postIdeas">Post Ideas (Optional):</label>
-            <textarea id="postIdeas" name="postIdeas" placeholder="Enter your post ideas..."></textarea>
+            <div class="form-group">
+                <label for="postIdeas">Post Ideas (Optional):</label>
+                <textarea id="postIdeas" name="postIdeas" placeholder="Enter your post ideas..."></textarea>
+            </div>
 
-            <button type="submit">Schedule Posts</button>
+            <button type="submit">SCHEDULE POSTS</button>
         </form>
         <div id="responseMessage"></div>
     </div>
